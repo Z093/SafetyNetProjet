@@ -26,7 +26,7 @@ public class ChildAlertController {
         // Filtrer les personnes vivant à cette adresse
         List<Person> personsAtAddress = dataLoader.getPersons().stream()
                 .filter(person -> person.getAddress().equalsIgnoreCase(address))
-                .collect(Collectors.toList());
+                .toList();
 
         // Séparer les enfants (<= 18 ans) et les autres membres du foyer
         List<ChildAlertResponse> children = personsAtAddress.stream()
