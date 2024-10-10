@@ -1,4 +1,4 @@
-package com.example.demo.controllerEndPoints;
+package com.example.demo.controller;
 
 import com.example.demo.model.Person;
 import com.example.demo.service.DataLoader;
@@ -33,7 +33,7 @@ public class PersonController {
     }
 
     // Mettre à jour une personne existante
-    @PutMapping
+    @PutMapping("/person")
     public ResponseEntity<String> updatePerson(@RequestBody Person updatedPerson) {
         Optional<Person> existingPerson = dataLoader.getPersons().stream()
                 .filter(person -> person.getFirstName().equalsIgnoreCase(updatedPerson.getFirstName()) &&
@@ -56,7 +56,7 @@ public class PersonController {
     }
 
     // Supprimer une personne
-    @DeleteMapping
+    @DeleteMapping("/person")
     public ResponseEntity<String> deletePerson(@RequestParam String firstName, @RequestParam String lastName) {
         Optional<Person> existingPerson = dataLoader.getPersons().stream()
                 .filter(person -> person.getFirstName().equalsIgnoreCase(firstName) &&

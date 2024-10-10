@@ -46,12 +46,4 @@ public class DataLoader {
 }
 
 
-/*@lombok.Data
-@ToString
-class Data {
-    private List<Person> persons;
-    private List<FireStation> firestations;
-    private List<MedicalRecord> medicalrecords;
 
-    // Getters et setters
-}*/

@@ -1,4 +1,4 @@
-package com.example.demo.controllerEndPoints;
+package com.example.demo.controller;
 
 
 import com.example.demo.model.MedicalRecord;

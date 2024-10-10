@@ -7,14 +7,15 @@ import com.example.demo.modelResponse.FireStationResponse;
 import com.example.demo.model.FireStation;
 import com.example.demo.service.DataLoader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -69,37 +70,54 @@ public class FireStationController {
         LocalDate birthDate = LocalDate.parse(medicalRecord.getBirthdate(), formatter);
         return (int) ChronoUnit.YEARS.between(birthDate, LocalDate.now());
     }
-}
-/*
-@Data
-@ToString
-class PersonResponse {
-    private String firstName;
-    private String lastName;
-    private String address;
-    private String phone;
 
-    public PersonResponse(String firstName, String lastName, String address, String phone) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.phone = phone;
+    // Ajouter un nouveau mapping caserne/adresse
+    @PostMapping("/firestation")
+    public ResponseEntity<String> addFireStationMapping(@RequestBody FireStation newMapping) {
+        Optional<FireStation> existingMapping = dataLoader.getFireStations().stream()
+                .filter(fs -> fs.getAddress().equalsIgnoreCase(newMapping.getAddress()))
+                .findFirst();
+
+        if (existingMapping.isPresent()) {
+            return new ResponseEntity<>("Mapping already exists for this address", HttpStatus.CONFLICT);
+        }
+
+        dataLoader.getFireStations().add(newMapping);
+        return new ResponseEntity<>("Fire station mapping added successfully", HttpStatus.CREATED);
     }
 
-    // Getters et setters
+    // Mettre à jour le numéro de la caserne de pompiers pour une adresse existante
+    @PutMapping("/firestation")
+    public ResponseEntity<String> updateFireStationMapping(@RequestBody FireStation updatedMapping) {
+        Optional<FireStation> existingMapping = dataLoader.getFireStations().stream()
+                .filter(fs -> fs.getAddress().equalsIgnoreCase(updatedMapping.getAddress()))
+                .findFirst();
+
+        if (existingMapping.isPresent()) {
+            FireStation fireStationToUpdate = existingMapping.get();
+            fireStationToUpdate.setStation(updatedMapping.getStation());
+            return new ResponseEntity<>("Fire station mapping updated successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Mapping not found for this address", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // Supprimer un mapping caserne/adresse
+    @DeleteMapping("/firestation")
+    public ResponseEntity<String> deleteFireStationMapping(@RequestParam String address) {
+        Optional<FireStation> existingMapping = dataLoader.getFireStations().stream()
+                .filter(fs -> fs.getAddress().equalsIgnoreCase(address))
+                .findFirst();
+
+        if (existingMapping.isPresent()) {
+            dataLoader.getFireStations().remove(existingMapping.get());
+            return new ResponseEntity<>("Fire station mapping deleted successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Mapping not found for this address", HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 }
-@Data
-@ToString
-class FireStationResponse {
-    private List<PersonResponse> persons;
-    private long numberOfAdults;
-    private long numberOfChildren;
 
-    public FireStationResponse(List<PersonResponse> persons, long numberOfAdults, long numberOfChildren) {
-        this.persons = persons;
-        this.numberOfAdults = numberOfAdults;
-        this.numberOfChildren = numberOfChildren;
-    }*/
-
-    // Getters et setters
 
