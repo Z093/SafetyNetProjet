@@ -56,28 +56,4 @@ public class PersonInfoController {
     }
 }
 
-// Classe pour représenter les informations des résidents
-/*@Data
-@ToString
-class PersonInfoM {
-    private String firstName;
-    private String lastName;
-    private String address;
-    private String email;
-    private int age;
-    private List<String> medications;
-    private List<String> allergies;
 
-    public PersonInfoM(String firstName, String lastName, String address, String email, int age,
-                      List<String> medications, List<String> allergies) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.email = email;
-        this.age = age;
-        this.medications = medications;
-        this.allergies = allergies;
-    }
-
-    // Getters et setters
-}*/

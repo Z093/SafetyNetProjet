@@ -24,7 +24,7 @@ public class DataLoader {
     public void loadData() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         // Charger le fichier JSON
-        File file = new File("/Users/ibenhamouda/git/demo/src/main/resources/static/data.json");
+        File file = new File("C:\\Users\\Zoro\\IdeaProjects\\SafetyNetProjet\\demo\\src\\main\\resources\\static\\data.json");
         Data data = objectMapper.readValue(file, Data.class);
 
         this.persons = data.getPersons();
@@ -43,15 +43,8 @@ public class DataLoader {
     public List<MedicalRecord> getMedicalRecords() {
         return medicalRecords;
     }
+
 }
 
 
-/*@lombok.Data
-@ToString
-class Data {
-    private List<Person> persons;
-    private List<FireStation> firestations;
-    private List<MedicalRecord> medicalrecords;
 
-    // Getters et setters
-}*/

@@ -6,6 +6,7 @@ import com.example.demo.model.Person;
 import com.example.demo.modelResponse.ChildAlertResponse;
 import com.example.demo.service.DataLoader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @RestController
 public class ChildAlertController {
@@ -62,20 +64,3 @@ public class ChildAlertController {
     }
 }
 
-/*@Data
-@ToString
-class ChildAlertResponse {
-    private String firstName;
-    private String lastName;
-    private int age;
-    private List<String> otherMembers;
-
-    public ChildAlertResponse(String firstName, String lastName, int age, List<String> otherMembers) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.otherMembers = otherMembers;
-    }
-
-    // Getters et setters
-}*/

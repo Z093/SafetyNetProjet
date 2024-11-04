@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@RestController
+/*@RestController
 @RequestMapping("/firestationEP")
 public class FireStationEPController {
     @Autowired
@@ -60,6 +60,6 @@ public class FireStationEPController {
             return new ResponseEntity<>("Mapping not found for this address", HttpStatus.NOT_FOUND);
         }
     }
-}
+}*/
 
 
