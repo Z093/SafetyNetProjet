@@ -1,5 +1,6 @@
-package com.example.demo.controller;
+package com.example.demo;
 
+import com.example.demo.controller.MedicalRecordController;
 import com.example.demo.model.MedicalRecord;
 import com.example.demo.service.DataLoader;
 import org.junit.jupiter.api.BeforeEach;

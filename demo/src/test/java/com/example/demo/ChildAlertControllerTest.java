@@ -1,5 +1,6 @@
-package com.example.demo.controller;
+package com.example.demo;
 
+import com.example.demo.controller.ChildAlertController;
 import com.example.demo.model.MedicalRecord;
 import com.example.demo.model.Person;
 import com.example.demo.modelResponse.ChildAlertResponse;

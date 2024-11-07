@@ -1,3 +1,5 @@
+package com.example.demo;
+
 import com.example.demo.controller.PersonController;
 import com.example.demo.model.Person;
 import com.example.demo.service.DataLoader;

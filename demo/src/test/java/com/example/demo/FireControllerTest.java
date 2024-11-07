@@ -1,3 +1,5 @@
+package com.example.demo;
+
 import com.example.demo.controller.FireController;
 import com.example.demo.model.MedicalRecord;
 import com.example.demo.model.Person;

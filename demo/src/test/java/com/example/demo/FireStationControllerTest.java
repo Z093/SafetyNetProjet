@@ -1,8 +1,8 @@
+package com.example.demo;
 
 import com.example.demo.controller.FireStationController;
 import com.example.demo.model.MedicalRecord;
 import com.example.demo.model.Person;
-import com.example.demo.modelResponse.PersonResponse;
 import com.example.demo.modelResponse.FireStationResponse;
 import com.example.demo.model.FireStation;
 import com.example.demo.service.DataLoader;
@@ -11,16 +11,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 
@@ -39,23 +38,23 @@ public class FireStationControllerTest {
 
     @Test
     public void testGetPersonsByStation_withPersons() {
-        // Mock data for fire stations and persons
-        FireStation fireStation = new FireStation("1234 Elm St", "1");
-        MedicalRecord medicalRecord = new MedicalRecord("John", "Doe", "05/20/2000", Arrays.asList("med1"), Arrays.asList("allergy1"));
+        // Arrange: Mock data for fire stations and persons with matching addresses.
+        FireStation fireStation = new FireStation("123 Main St", "1");
+        MedicalRecord medicalRecord = new MedicalRecord("John", "Doe", "05/20/2000", List.of("med1"), List.of("allergy1"));
         Person person = new Person("John", "Doe", "123 Main St", "City", "00000", "123-456-7890", "john.doe@example.com", 25, medicalRecord);
 
-
+        // Mock the dataLoader to return this data.
         when(dataLoader.getFireStations()).thenReturn(Collections.singletonList(fireStation));
         when(dataLoader.getPersons()).thenReturn(Collections.singletonList(person));
         when(dataLoader.getMedicalRecords()).thenReturn(Collections.singletonList(medicalRecord));
 
-        // Call the controller method
+        // Act: Call the controller method.
         FireStationResponse response = fireStationController.getPersonsByStation("1");
 
-        // Verify the result
-        assertEquals(1, response.getPersons().size());
-        assertEquals(1, response.getNumberOfAdults());
-        assertEquals(0, response.getNumberOfChildren());
+        // Assert: Verify the result.
+        assertEquals(1, response.getPersons().size(), "Expected one person associated with the fire station.");
+        assertEquals(1, response.getNumberOfAdults(), "Expected one adult.");
+        assertEquals(0, response.getNumberOfChildren(), "Expected zero children.");
     }
 
     @Test
@@ -135,16 +134,22 @@ public class FireStationControllerTest {
 
     @Test
     public void testDeleteFireStationMapping_success() {
+        // Arrange: Create the existing mapping and add it to the mocked data loader's list.
         FireStation existingMapping = new FireStation("5678 Oak St", "2");
+        List<FireStation> fireStations = new ArrayList<>();
+        fireStations.add(existingMapping);
 
-        when(dataLoader.getFireStations()).thenReturn(new ArrayList<>());
+        // Configure the dataLoader mock to return this list.
+        when(dataLoader.getFireStations()).thenReturn(fireStations);
 
-        // Call the controller method
+        // Act: Call the controller method to delete the fire station mapping.
         ResponseEntity<String> response = fireStationController.deleteFireStationMapping("5678 Oak St");
 
-        // Verify the result
-        List<FireStation> fireStations = new ArrayList<>(dataLoader.getFireStations());
-          assertEquals("Fire station mapping deleted successfully", response.getBody());
+        // Assert: Verify the expected response and that the mapping is deleted.
+        assertEquals("Fire station mapping deleted successfully", response.getBody());
+
+        // Optional: Verify the dataLoader's list is now empty (assuming deleteFireStationMapping modifies it).
+        assertTrue(dataLoader.getFireStations().isEmpty());
     }
 
     @Test

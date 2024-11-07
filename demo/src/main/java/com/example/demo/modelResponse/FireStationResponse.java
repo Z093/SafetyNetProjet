@@ -18,4 +18,29 @@ public class FireStationResponse {
         this.numberOfChildren = numberOfChildren;
     }
 
+    public long getNumberOfChildren() {
+        return numberOfChildren;
+    }
+
+    public void setNumberOfChildren(long numberOfChildren) {
+        this.numberOfChildren = numberOfChildren;
+    }
+
+    public long getNumberOfAdults() {
+        return numberOfAdults;
+    }
+
+    public void setNumberOfAdults(long numberOfAdults) {
+        this.numberOfAdults = numberOfAdults;
+    }
+
+    public List<PersonResponse> getPersons() {
+        return persons;
+    }
+
+    public void setPersons(List<PersonResponse> persons) {
+        this.persons = persons;
+    }
+
+
 }
