@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
 @RestController
 public class FloodController {
 
@@ -61,26 +62,4 @@ public class FloodController {
     }
 }
 
-// Classe pour représenter les informations des résidents
-/*@Data
-@ToString
-class
-PersonInfoFlood {
-    private String firstName;
-    private String lastName;
-    private String phone;
-    private int age;
-    private List<String> medications;
-    private List<String> allergies;
 
-    public PersonInfoFlood(String firstName, String lastName, String phone, int age, List<String> medications, List<String> allergies) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phone = phone;
-        this.age = age;
-        this.medications = medications;
-        this.allergies = allergies;
-    }
-
-    // Getters et setters
-}*/

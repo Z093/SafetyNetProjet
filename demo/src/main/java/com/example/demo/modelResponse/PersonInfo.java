@@ -12,6 +12,7 @@ import java.util.List;
         private String firstName;
         private String lastName;
         private String phone;
+        private String email;
         private int age;
         private List<String> medications;
         private List<String> allergies;
@@ -20,10 +21,13 @@ import java.util.List;
             this.firstName = firstName;
             this.lastName = lastName;
             this.phone = phone;
+            this.email = email;
             this.age = age;
             this.medications = medications;
             this.allergies = allergies;
         }
 
-        // Getters et setters
+
+
+    // Getters et setters
     }

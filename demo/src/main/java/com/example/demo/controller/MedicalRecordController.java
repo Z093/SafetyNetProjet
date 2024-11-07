@@ -1,4 +1,4 @@
-package com.example.demo.controllerEndPoints;
+package com.example.demo.controller;
 
 
 import com.example.demo.model.MedicalRecord;
@@ -17,7 +17,7 @@ public class MedicalRecordController {
     private DataLoader dataLoader; // Service simulant la base de données
 
     // Ajouter un nouveau dossier médical
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<String> addMedicalRecord(@RequestBody MedicalRecord newMedicalRecord) {
         // Vérifier si un dossier médical existe déjà pour cette personne
         Optional<MedicalRecord> existingRecord = dataLoader.getMedicalRecords().stream()
@@ -54,7 +54,7 @@ public class MedicalRecordController {
     }
 
     // Supprimer un dossier médical
-    @DeleteMapping
+    @DeleteMapping("/delete")
     public ResponseEntity<String> deleteMedicalRecord(@RequestParam String firstName, @RequestParam String lastName) {
         Optional<MedicalRecord> existingRecord = dataLoader.getMedicalRecords().stream()
                 .filter(mr -> mr.getFirstName().equalsIgnoreCase(firstName) &&
