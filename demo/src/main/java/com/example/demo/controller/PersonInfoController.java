@@ -4,6 +4,8 @@ import com.example.demo.model.Person;
 import com.example.demo.model.MedicalRecord;
 import com.example.demo.service.DataLoader;
 import com.example.demo.modelResponse.PersonInfoResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,21 +19,28 @@ import java.util.List;
 
 @RestController
 public class PersonInfoController {
+
+    private static final Logger logger = LoggerFactory.getLogger(PersonInfoController.class);
+
     @Autowired
     private DataLoader dataLoader;
 
     @GetMapping("/personInfo")
     public List<PersonInfoResponse> getPersonInfoByLastName(@RequestParam String lastName) {
-        // Filtrer les personnes par nom de famille
-        // Récupérer les informations médicales
-        // Créer l'objet PersonInfo avec toutes les informations requises
+        logger.info("Fetching person info for last name: {}", lastName);
+
         List<PersonInfoResponse> list = new ArrayList<>();
-        for (Person person1 : dataLoader.getPersons()) {
-            if (person1.getLastName().equalsIgnoreCase(lastName)) {
-// Récupérer les informations médicales
+        boolean personFound = false;
+
+        for (Person person : dataLoader.getPersons()) {
+            if (person.getLastName().equalsIgnoreCase(lastName)) {
+                personFound = true;
+                logger.info("Processing person: {} {}", person.getFirstName(), person.getLastName());
+
+                // Récupérer les informations médicales
                 MedicalRecord medicalRecord = dataLoader.getMedicalRecords().stream()
-                        .filter(record -> record.getFirstName().equals(person1.getFirstName()) &&
-                                record.getLastName().equals(person1.getLastName()))
+                        .filter(record -> record.getFirstName().equals(person.getFirstName()) &&
+                                record.getLastName().equals(person.getLastName()))
                         .findFirst()
                         .orElse(null);
 
@@ -40,11 +49,24 @@ public class PersonInfoController {
                 List<String> allergies = medicalRecord != null ? medicalRecord.getAllergies() : List.of();
 
                 // Créer l'objet PersonInfo avec toutes les informations requises
-                PersonInfoResponse apply = new PersonInfoResponse(person1.getFirstName(), person1.getLastName(), person1.getAddress(),
-                        person1.getEmail(), age, medications, allergies);
-                list.add(apply);
+                PersonInfoResponse personInfo = new PersonInfoResponse(
+                        person.getFirstName(),
+                        person.getLastName(),
+                        person.getAddress(),
+                        person.getEmail(),
+                        age,
+                        medications,
+                        allergies
+                );
+                list.add(personInfo);
+                logger.info("PersonInfo created for: {} {}", person.getFirstName(), person.getLastName());
             }
         }
+
+        if (!personFound) {
+            logger.error("No person found with last name: {}", lastName);
+        }
+
         return list;
     }
 
@@ -55,5 +77,3 @@ public class PersonInfoController {
         return (int) ChronoUnit.YEARS.between(birthDate, LocalDate.now());
     }
 }
-
-
