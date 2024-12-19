@@ -1,94 +1,131 @@
-package com.example.demo;
+package com.example.demo.service;
 
-
-import com.example.demo.controller.PersonInfoController;
+import com.example.demo.Utils.DataLoader;
 import com.example.demo.model.MedicalRecord;
 import com.example.demo.model.Person;
-import com.example.demo.service.DataLoader;
+import com.example.demo.modelResponse.PersonInfoResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
-import static org.hamcrest.Matchers.containsString;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@WebMvcTest(PersonInfoController.class)
+@ExtendWith(MockitoExtension.class)
 public class PersonInfoControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @InjectMocks
+    private PersonInfoServiceImpl personInfoServiceImpl;
 
-    @MockBean
+    @Mock
     private DataLoader dataLoader;
 
-    private Person person1;
-    private Person person2;
-    private MedicalRecord medicalRecord1;
-    private MedicalRecord medicalRecord2;
+    private List<Person> mockPersons;
+    private List<MedicalRecord> mockMedicalRecords;
 
     @BeforeEach
-    public void setUp() {
-        // Création de deux personnes avec le même nom de famille mais des informations différentes
-        medicalRecord1 = new MedicalRecord("John", "Doe","01/01/2000", List.of("aspirin"), List.of("penicillin"));
-        medicalRecord2 = new MedicalRecord("Jane", "Doe","01/01/2000", List.of("ibuprofen"), List.of("gluten"));
+    void setUp() {
+        // Mock des personnes
+        mockPersons = Arrays.asList(
+                new Person("John", "Doe", "123 Main St", "City", "00000", "123-456-7890", "john.doe@example.com", 25, null),
+                new Person("Jane", "Doe", "456 Oak St", "City", "00000", "987-654-3210", "jane.doe@example.com", 30, null)
 
-        person1 = new Person("John", "Doe", "123 Main St", "City", "00000", "123-456-7890", "john.doe@example.com", 25, medicalRecord1);
-        person2 = new Person("Jane", "Doe", "456 Oak St", "City", "00000", "987-654-3210", "jane.doe@example.com", 30, medicalRecord2);
+        );
+
+
+
+        // Mock des dossiers médicaux
+        mockMedicalRecords = Arrays.asList(
+                new MedicalRecord("John", "Doe", "01/15/1985", Arrays.asList("Aspirin"), Arrays.asList("Peanut")),
+                new MedicalRecord("Jane", "Doe", "06/22/1990", Arrays.asList("Ibuprofen"), Arrays.asList("Pollen"))
+        );
     }
 
-    // Test 1: Retourne les informations pour les personnes ayant le nom "Doe"
     @Test
-    public void testGetPersonInfoByLastName_withValidLastName() throws Exception {
-        when(dataLoader.getPersons()).thenReturn(List.of(person1, person2));
-        when(dataLoader.getMedicalRecords()).thenReturn(List.of(medicalRecord1, medicalRecord2));
+    void testGetPersonInfoByLastName_PersonFound() {
+        // Configuration du comportement du mock DataLoader
+        when(dataLoader.getPersons()).thenReturn(mockPersons);
+        when(dataLoader.getMedicalRecords()).thenReturn(mockMedicalRecords);
 
+        // Appel de la méthode de service
+        List<PersonInfoResponse> result = personInfoServiceImpl.getPersonInfoByLastName("Doe");
 
-        mockMvc.perform(get("/personInfo?lastName=Doe")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("John")))
-                .andExpect(content().string(containsString("Jane")))
-                .andExpect(content().string(containsString("123 Main St")))
-                .andExpect(content().string(containsString("456 Oak St")))
-                .andExpect(content().string(containsString("aspirin")))
-                .andExpect(content().string(containsString("ibuprofen")))
-                .andExpect(content().string(containsString("penicillin")))
-                .andExpect(content().string(containsString("gluten")));
+        // Assertions
+        assertEquals(2, result.size());
 
+        PersonInfoResponse personInfoJohn = result.get(0);
+        assertEquals("John", personInfoJohn.getFirstName());
+        assertEquals("Doe", personInfoJohn.getLastName());
+        assertEquals("123 Main St", personInfoJohn.getAddress());
+        assertEquals("john.doe@example.com", personInfoJohn.getEmail());
+        assertTrue(personInfoJohn.getAge() > 0); // On vérifie que l'âge est calculé
+        assertEquals(1, personInfoJohn.getMedications().size());
+        assertTrue(personInfoJohn.getMedications().contains("Aspirin"));
+        assertEquals(1, personInfoJohn.getAllergies().size());
+        assertTrue(personInfoJohn.getAllergies().contains("Peanut"));
 
-
+        PersonInfoResponse personInfoJane = result.get(1);
+        assertEquals("Jane", personInfoJane.getFirstName());
+        assertEquals("Doe", personInfoJane.getLastName());
+        assertEquals("456 Oak St", personInfoJane.getAddress());
+        assertEquals("jane.doe@example.com", personInfoJane.getEmail());
+        assertTrue(personInfoJane.getAge() > 0); // On vérifie que l'âge est calculé
+        assertEquals(1, personInfoJane.getMedications().size());
+        assertTrue(personInfoJane.getMedications().contains("Ibuprofen"));
+        assertEquals(1, personInfoJane.getAllergies().size());
+        assertTrue(personInfoJane.getAllergies().contains("Pollen"));
     }
 
-    // Test 2: Retourne une réponse vide si aucun nom ne correspond
     @Test
-    public void testGetPersonInfoByLastName_withInvalidLastName() throws Exception {
-        when(dataLoader.getPersons()).thenReturn(Arrays.asList(person1, person2));
+    void testGetPersonInfoByLastName_PersonNotFound() {
+        // Configuration du comportement du mock DataLoader
+        when(dataLoader.getPersons()).thenReturn(mockPersons);
 
-        mockMvc.perform(get("/personInfo?lastName=toto")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string("[]"));
+        // Appel de la méthode de service avec un nom de famille inexistant
+        List<PersonInfoResponse> result = personInfoServiceImpl.getPersonInfoByLastName("Smith");
+
+        // Assertions
+        assertTrue(result.isEmpty());
     }
 
-    // Test 3: Retourne 400 Bad Request si le paramètre lastName est manquant
     @Test
-    public void testGetPersonInfoByLastName_missingLastName() throws Exception {
-        mockMvc.perform(get("/personInfo")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+    void testGetPersonInfoByLastName_NoMedicalRecord() {
+        // Supposons qu'une personne existe sans dossier médical
+        mockPersons = Arrays.asList(
+                new Person("John", "Smith", "789 Maple Ave", "City", "00000", "333-456-7890", "john.smith@email.com", 25, null)
+        );
+
+        // Configuration du comportement du mock DataLoader
+        when(dataLoader.getPersons()).thenReturn(mockPersons);
+        when(dataLoader.getMedicalRecords()).thenReturn(Collections.emptyList()); // Pas de dossier médical
+
+        // Appel de la méthode de service
+        List<PersonInfoResponse> result = personInfoServiceImpl.getPersonInfoByLastName("Smith");
+
+        // Assertions
+        assertEquals(1, result.size());
+        PersonInfoResponse personInfo = result.get(0);
+        assertEquals("John", personInfo.getFirstName());
+        assertEquals("Smith", personInfo.getLastName());
+        assertEquals("789 Maple Ave", personInfo.getAddress());
+        assertEquals("john.smith@email.com", personInfo.getEmail());
+        assertEquals(0, personInfo.getAge()); // Pas de dossier médical, donc âge = 0
+        assertTrue(personInfo.getMedications().isEmpty());
+        assertTrue(personInfo.getAllergies().isEmpty());
+    }
+
+    @Test
+    void testCalculateAge() {
+        // Test de la méthode de calcul de l'âge
+        int age = personInfoServiceImpl.calculateAge("01/01/2000");
+        assertTrue(age > 0);
     }
 }

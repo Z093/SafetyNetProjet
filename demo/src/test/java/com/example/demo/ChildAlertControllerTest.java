@@ -4,7 +4,9 @@ import com.example.demo.controller.ChildAlertController;
 import com.example.demo.model.MedicalRecord;
 import com.example.demo.model.Person;
 import com.example.demo.modelResponse.ChildAlertResponse;
-import com.example.demo.service.DataLoader;
+import com.example.demo.Utils.DataLoader;
+import com.example.demo.service.ChildAlertService;
+import com.example.demo.service.ChildAlertServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,7 +26,7 @@ class ChildAlertControllerTest {
     private DataLoader dataLoader;
 
     @InjectMocks
-    private ChildAlertController childAlertController;
+    public ChildAlertServiceImpl childAlertServiceImpl;
 
     @BeforeEach
     void setUp() {
@@ -46,7 +48,8 @@ class ChildAlertControllerTest {
         when(dataLoader.getMedicalRecords()).thenReturn(Arrays.asList(childMedicalRecord, adultMedicalRecord));
 
         // Call the method with matching address
-        List<ChildAlertResponse> response = childAlertController.getChildrenAtAddress("123 Main St");
+
+        List<ChildAlertResponse> response = childAlertServiceImpl.getChildrenAtAddress("123 Main St");
 
         // Verify results
         assertEquals(1, response.size());
@@ -67,7 +70,8 @@ class ChildAlertControllerTest {
         when(dataLoader.getMedicalRecords()).thenReturn(Collections.singletonList(adultMedicalRecord));
 
         // Appeler la méthode testée
-        List<ChildAlertResponse> response = childAlertController.getChildrenAtAddress("1234 Elm Street");
+
+        List<ChildAlertResponse> response = childAlertServiceImpl.getChildrenAtAddress("1234 Elm Street");
 
         // Vérifier que la réponse est vide (pas d'enfants)
         assertEquals(0, response.size());
@@ -79,7 +83,7 @@ class ChildAlertControllerTest {
         when(dataLoader.getPersons()).thenReturn(Collections.emptyList());
 
         // Appeler la méthode testée
-        List<ChildAlertResponse> response = childAlertController.getChildrenAtAddress("1234 Elm Street");
+        List<ChildAlertResponse> response = childAlertServiceImpl.getChildrenAtAddress("1234 Elm Street");
 
         // Vérifier que la réponse est vide
         assertEquals(0, response.size());

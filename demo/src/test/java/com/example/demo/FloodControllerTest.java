@@ -5,7 +5,8 @@ import com.example.demo.model.MedicalRecord;
 import com.example.demo.model.Person;
 import com.example.demo.model.FireStation;
 import com.example.demo.modelResponse.FloodResponse;
-import com.example.demo.service.DataLoader;
+import com.example.demo.Utils.DataLoader;
+import com.example.demo.service.FloodServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,7 +25,8 @@ public class FloodControllerTest {
     private DataLoader dataLoader;
 
     @InjectMocks
-    private FloodController floodController;
+    //private FloodController floodController;
+    private FloodServiceImpl floodServiceImpl;
 
     @BeforeEach
     public void setUp() {
@@ -55,7 +57,7 @@ public class FloodControllerTest {
 
         // Call the method with specific station IDs
         List<String> stations = List.of("1", "2");
-        Map<String, List<FloodResponse>> result = floodController.getHouseholdsByStations(stations);
+        Map<String, List<FloodResponse>> result = floodServiceImpl.getHouseholdsByStations(stations);
 
         // Validate the result
         assertEquals(2, result.size()); // Expecting 2 addresses

@@ -1,7 +1,8 @@
 import com.example.demo.controller.PhoneAlertController;
-import com.example.demo.service.DataLoader;
+import com.example.demo.Utils.DataLoader;
 import com.example.demo.model.Person;
 import com.example.demo.model.FireStation;
+import com.example.demo.service.PhoneAlertServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,13 +16,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-class PhoneAlertControllerTest {
+public class PhoneAlertControllerTest {
 
     @Mock
     private DataLoader dataLoader;
 
     @InjectMocks
-    private PhoneAlertController phoneAlertController;
+    //private PhoneAlertController phoneAlertController;
+    private PhoneAlertServiceImpl phoneAlertServiceImpl;
 
     @BeforeEach
     void setUp() {
@@ -48,7 +50,7 @@ class PhoneAlertControllerTest {
         List<String> expectedPhoneNumbers = Arrays.asList("123-456-7890", "345-678-9012");
 
         // Call the method with firestation "1"
-        List<String> actualPhoneNumbers = phoneAlertController.getPhoneNumbersByFirestation("1");
+        List<String> actualPhoneNumbers = phoneAlertServiceImpl.getPhoneNumbersByFirestation("1");
 
         // Assert that the result matches the expected list
         assertEquals(expectedPhoneNumbers, actualPhoneNumbers);
@@ -64,7 +66,7 @@ class PhoneAlertControllerTest {
         List<String> expectedPhoneNumbers = Collections.emptyList();
 
         // Call the method with a firestation number that has no matches
-        List<String> actualPhoneNumbers = phoneAlertController.getPhoneNumbersByFirestation("3");
+        List<String> actualPhoneNumbers = phoneAlertServiceImpl.getPhoneNumbersByFirestation("3");
 
         // Assert that the result is an empty list
         assertEquals(expectedPhoneNumbers, actualPhoneNumbers);

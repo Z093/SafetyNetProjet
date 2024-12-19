@@ -2,7 +2,8 @@ package com.example.demo;
 
 import com.example.demo.controller.PersonController;
 import com.example.demo.model.Person;
-import com.example.demo.service.DataLoader;
+import com.example.demo.Utils.DataLoader;
+import com.example.demo.service.PersonServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -24,7 +24,8 @@ class PersonControllerTest {
     private DataLoader dataLoader;
 
     @InjectMocks
-    private PersonController personController;
+    //private PersonController personController;
+    private PersonServiceImpl personServiceImpl;
 
     private List<Person> personList;
 
@@ -47,7 +48,7 @@ class PersonControllerTest {
         Person newPerson = new Person("Jane", "Smith", "456 Maple St", "Los Angeles", "90001", "987-654-3210", "jane.doe@example.com", 30, null);
 
         // Act
-        ResponseEntity<String> response = personController.addPerson(newPerson);
+        ResponseEntity<String> response = personServiceImpl.addPerson(newPerson);
 
         // Assert
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -59,7 +60,7 @@ class PersonControllerTest {
     void testAddPerson_Conflict() {
         Person duplicatePerson = new Person("John", "Doe", "789 Elm St", "Chicago", "60601", "555-123-4567", "johndoe@example.com", 30, null);
 
-        ResponseEntity<String> response = personController.addPerson(duplicatePerson);
+        ResponseEntity<String> response = personServiceImpl.addPerson(duplicatePerson);
 
         // Verify
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
@@ -71,7 +72,7 @@ class PersonControllerTest {
     void testUpdatePerson_Success() {
         Person updatedPerson = new Person("John", "Doe", "789 Elm St", "Chicago", "60601", "555-123-4567", "johndoe@example.com", 30, null);
 
-        ResponseEntity<String> response = personController.updatePerson(updatedPerson);
+        ResponseEntity<String> response = personServiceImpl.updatePerson(updatedPerson);
 
         // Verify
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -83,7 +84,7 @@ class PersonControllerTest {
     void testUpdatePerson_NotFound() {
         Person nonExistentPerson = new Person("Jane", "Doe", "456 Maple St", "San Francisco", "94101", "987-654-3210", "jane.doe@example.com", 30, null);
 
-        ResponseEntity<String> response = personController.updatePerson(nonExistentPerson);
+        ResponseEntity<String> response = personServiceImpl.updatePerson(nonExistentPerson);
 
         // Verify
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -93,7 +94,7 @@ class PersonControllerTest {
 
     @Test
     void testDeletePerson_Success() {
-        ResponseEntity<String> response = personController.deletePerson("John", "Doe");
+        ResponseEntity<String> response = personServiceImpl.deletePerson("John", "Doe");
 
         // Verify
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -103,7 +104,7 @@ class PersonControllerTest {
 
     @Test
     void testDeletePerson_NotFound() {
-        ResponseEntity<String> response = personController.deletePerson("Jane", "Doe");
+        ResponseEntity<String> response = personServiceImpl.deletePerson("Jane", "Doe");
 
         // Verify
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());

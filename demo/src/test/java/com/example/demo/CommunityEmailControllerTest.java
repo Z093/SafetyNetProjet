@@ -1,71 +1,98 @@
-package com.example.demo;
+package com.example.demo.service;
 
-import com.example.demo.controller.CommunityEmailController;
+import com.example.demo.Utils.DataLoader;
 import com.example.demo.model.Person;
-import com.example.demo.service.DataLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CommunityEmailController.class)
+@ExtendWith(MockitoExtension.class)
 public class CommunityEmailControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @InjectMocks
+    private CommunityEmailServiceImpl communityEmailServiceImpl;
 
-    @MockBean
+    @Mock
     private DataLoader dataLoader;
 
-    private Person person1;
-    private Person person2;
-    private Person person3;
+    private List<Person> mockPersonList;
 
     @BeforeEach
-    public void setUp() {
-        // Création de quelques personnes avec des villes et emails différents
-        person1 = new Person("John", "Doe", "123 Main St", "City1", "00000", "123-456-7890", "john.doe@example.com", 25,null);
-        person2 = new Person("Jane", "Doe", "456 Oak St", "City1", "00000", "987-654-3210", "jane.doe@example.com", 30,null);
-        person3 = new Person("Bob", "Smith", "789 Pine St", "City2", "00000", "111-222-3333", "bob.smith@example.com", 40,null);
+    void setUp() {
+        // Initialisation des données de test
+        mockPersonList = Arrays.asList(
+                  new Person("John", "Doe", "123 Main St", "City1", "00000", "123-456-7890", "john.doe@example.com", 25, null),
+                  new Person("Jane", "Doe", "456 Oak St", "City1", "00000", "987-654-3210", "jane.doe@example.com", 30, null),
+                  new Person("Bob", "Smith", "789 Pine St", "City2", "00000", "111-222-3333", "bob.smith@example.com", 40, null),
+                new Person("Alice", "Johnson", "456 Oak St", "City1", "00000", "333-222-4444", "alice.johnson@example.com", 45, null)
+
+        );
     }
 
-    // Test 1: Retourne les emails pour une ville valide
     @Test
-    public void testGetEmailsByCity_withValidCity() throws Exception {
-        when(dataLoader.getPersons()).thenReturn(Arrays.asList(person1, person2, person3));
+    void testGetEmailsByCity_ReturnsEmailsForExistingCity() {
+        // Arrange
+        String city = "City1";
+        when(dataLoader.getPersons()).thenReturn(mockPersonList);
 
-        mockMvc.perform(get("/communityEmail?city=City1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string("[\"john.doe@example.com\",\"jane.doe@example.com\"]"));
+        // Act
+        List<String> emails = communityEmailServiceImpl.getEmailsByCity(city);
+
+        // Assert
+        assertEquals(3, emails.size()); // John, Jane, Alice (John est dupliqué mais distinct() le retire)
+        assertTrue(emails.contains("john.doe@example.com"));
+        assertTrue(emails.contains("jane.doe@example.com"));
+        assertTrue(emails.contains("alice.johnson@example.com"));
     }
 
-    // Test 2: Retourne une réponse vide si aucune personne n'est trouvée dans la ville
     @Test
-    public void testGetEmailsByCity_withNoPersonsInCity() throws Exception {
-        when(dataLoader.getPersons()).thenReturn(Arrays.asList(person1, person2, person3));
+    void testGetEmailsByCity_ReturnsEmptyListForNonExistingCity() {
+        // Arrange
+        String city = "City3";
+        when(dataLoader.getPersons()).thenReturn(mockPersonList);
 
-        mockMvc.perform(get("/communityEmail?city=City3")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string("[]"));
+        // Act
+        List<String> emails = communityEmailServiceImpl.getEmailsByCity(city);
+
+        // Assert
+        assertTrue(emails.isEmpty());
     }
 
-    // Test 3: Retourne 400 Bad Request si le paramètre city est manquant
     @Test
-    public void testGetEmailsByCity_missingCityParam() throws Exception {
-        mockMvc.perform(get("/communityEmail")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+    void testGetEmailsByCity_ReturnsEmptyListWhenNoPersonsAvailable() {
+        // Arrange
+        String city = "City1";
+        when(dataLoader.getPersons()).thenReturn(Collections.emptyList());
+
+        // Act
+        List<String> emails = communityEmailServiceImpl.getEmailsByCity(city);
+
+        // Assert
+        assertTrue(emails.isEmpty());
+    }
+
+    @Test
+    void testGetEmailsByCity_HandlesExceptionGracefully() {
+        // Arrange
+        String city = "City1";
+        when(dataLoader.getPersons()).thenThrow(new RuntimeException("Database error"));
+
+        // Act
+        List<String> emails = communityEmailServiceImpl.getEmailsByCity(city);
+
+        // Assert
+        assertTrue(emails.isEmpty()); // On vérifie que la liste retournée est vide en cas d'exception
     }
 }

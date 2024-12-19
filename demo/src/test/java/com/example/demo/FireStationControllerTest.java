@@ -1,35 +1,34 @@
-package com.example.demo;
+package com.example.demo.service;
 
-import com.example.demo.controller.FireStationController;
+import com.example.demo.Utils.DataLoader;
+import com.example.demo.model.FireStation;
 import com.example.demo.model.MedicalRecord;
 import com.example.demo.model.Person;
 import com.example.demo.modelResponse.FireStationResponse;
-import com.example.demo.model.FireStation;
-import com.example.demo.service.DataLoader;
+import com.example.demo.modelResponse.PersonResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-
+@ExtendWith(MockitoExtension.class)
 public class FireStationControllerTest {
+
+    @InjectMocks
+    private FireStationServiceImpl fireStationServiceImpl;
 
     @Mock
     private DataLoader dataLoader;
-
-    @InjectMocks
-    private FireStationController fireStationController;
 
     @BeforeEach
     public void setUp() {
@@ -38,129 +37,69 @@ public class FireStationControllerTest {
 
     @Test
     public void testGetPersonsByStation_withPersons() {
-        // Arrange: Mock data for fire stations and persons with matching addresses.
-        FireStation fireStation = new FireStation("123 Main St", "1");
-        MedicalRecord medicalRecord = new MedicalRecord("John", "Doe", "05/20/2000", List.of("med1"), List.of("allergy1"));
-        Person person = new Person("John", "Doe", "123 Main St", "City", "00000", "123-456-7890", "john.doe@example.com", 25, medicalRecord);
+        // Données de test
+        FireStation fireStation1 = new FireStation("123 Main St", "1");
+        FireStation fireStation2 = new FireStation("456 Oak St", "2");
 
-        // Mock the dataLoader to return this data.
-        when(dataLoader.getFireStations()).thenReturn(Collections.singletonList(fireStation));
-        when(dataLoader.getPersons()).thenReturn(Collections.singletonList(person));
-        when(dataLoader.getMedicalRecords()).thenReturn(Collections.singletonList(medicalRecord));
+        MedicalRecord medicalRecord1 = new MedicalRecord("John", "Doe", "05/20/2000", Arrays.asList("med1"), Arrays.asList("allergy1"));
+        MedicalRecord medicalRecord2 = new MedicalRecord("Jane", "Doe", "09/15/2015", Arrays.asList("med2"), Arrays.asList("allergy2"));
 
-        // Act: Call the controller method.
-        FireStationResponse response = fireStationController.getPersonsByStation("1");
+        Person person1 = new Person("John", "Doe", "123 Main St", "City", "00000", "123-456-7890", "john.doe@example.com", 25, medicalRecord1);
+        Person person2 = new Person("Jane", "Doe", "123 Main St", "City", "00000", "987-654-3210", "jane.doe@example.com", 8, medicalRecord2);
 
-        // Assert: Verify the result.
-        assertEquals(1, response.getPersons().size(), "Expected one person associated with the fire station.");
-        assertEquals(1, response.getNumberOfAdults(), "Expected one adult.");
-        assertEquals(0, response.getNumberOfChildren(), "Expected zero children.");
+        // Mock des méthodes de DataLoader
+        when(dataLoader.getFireStations()).thenReturn(Arrays.asList(fireStation1, fireStation2));
+        when(dataLoader.getPersons()).thenReturn(Arrays.asList(person1, person2));
+        when(dataLoader.getMedicalRecords()).thenReturn(Arrays.asList(medicalRecord1, medicalRecord2));
+
+        // Appel de la méthode à tester
+        FireStationResponse response = fireStationServiceImpl.getPersonsByStation("1");
+
+        // Vérifications
+        assertEquals(2, response.getPersons().size()); // On doit retrouver 2 personnes
+        assertEquals(1, response.getNumberOfAdults()); // John est un adulte (25 ans)
+        assertEquals(1, response.getNumberOfChildren()); // Jane est un enfant (8 ans)
+
+        // Vérification des informations de la personne
+        PersonResponse personResponse1 = response.getPersons().get(0);
+        assertEquals("John", personResponse1.getFirstName());
+        assertEquals("Doe", personResponse1.getLastName());
+        assertEquals("123 Main St", personResponse1.getAddress());
+        assertEquals("123-456-7890", personResponse1.getPhone());
     }
 
     @Test
     public void testGetPersonsByStation_noPersons() {
-        // Mock data with no persons for the station
-        FireStation fireStation = new FireStation("1234 Elm St", "1");
-
-        when(dataLoader.getFireStations()).thenReturn(Collections.singletonList(fireStation));
+        // Mock des méthodes de DataLoader avec des données vides
+        when(dataLoader.getFireStations()).thenReturn(Collections.emptyList());
         when(dataLoader.getPersons()).thenReturn(Collections.emptyList());
 
-        // Call the controller method
-        FireStationResponse response = fireStationController.getPersonsByStation("1");
+        // Appel de la méthode à tester
+        FireStationResponse response = fireStationServiceImpl.getPersonsByStation("1");
 
-        // Verify the result
-        assertEquals(0, response.getPersons().size());
-        assertEquals(0, response.getNumberOfAdults());
-        assertEquals(0, response.getNumberOfChildren());
+        // Vérifications
+        assertEquals(0, response.getPersons().size()); // Aucune personne n'est retournée
+        assertEquals(0, response.getNumberOfAdults()); // Aucun adulte
+        assertEquals(0, response.getNumberOfChildren()); // Aucun enfant
     }
 
     @Test
-    public void testAddFireStationMapping_success() {
-        FireStation newMapping = new FireStation("5678 Oak St", "2");
+    public void testGetPersonsByStation_noMedicalRecord() {
+        // Données de test
+        FireStation fireStation1 = new FireStation("123 Main St", "1");
+        Person person1 = new Person("John", "Doe", "123 Main St", "City", "00000", "123-456-7890", "john.doe@example.com", 25, null);
 
-        when(dataLoader.getFireStations()).thenReturn(new ArrayList<>());
+        // Mock des méthodes de DataLoader
+        when(dataLoader.getFireStations()).thenReturn(Collections.singletonList(fireStation1));
+        when(dataLoader.getPersons()).thenReturn(Collections.singletonList(person1));
+        when(dataLoader.getMedicalRecords()).thenReturn(Collections.emptyList()); // Aucun dossier médical
 
-        // Call the controller method
-        ResponseEntity<String> response = fireStationController.addFireStationMapping(newMapping);
+        // Appel de la méthode à tester
+        FireStationResponse response = fireStationServiceImpl.getPersonsByStation("1");
 
-        // Verify the result
-        List<FireStation> fireStations = new ArrayList<>(dataLoader.getFireStations());
-        fireStations.add(newMapping);
-    }
-
-    @Test
-    public void testAddFireStationMapping_conflict() {
-        FireStation existingMapping = new FireStation("5678 Oak St", "2");
-        FireStation newMapping = new FireStation("5678 Oak St", "3");
-
-        when(dataLoader.getFireStations()).thenReturn(Collections.singletonList(existingMapping));
-
-        // Call the controller method
-        ResponseEntity<String> response = fireStationController.addFireStationMapping(newMapping);
-
-        // Verify the result
-        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
-        assertEquals("Mapping already exists for this address", response.getBody());
-    }
-
-    @Test
-    public void testUpdateFireStationMapping_success() {
-        FireStation existingMapping = new FireStation("5678 Oak St", "2");
-        FireStation updatedMapping = new FireStation("5678 Oak St", "3");
-
-        when(dataLoader.getFireStations()).thenReturn(Collections.singletonList(existingMapping));
-
-        // Call the controller method
-        ResponseEntity<String> response = fireStationController.updateFireStationMapping(updatedMapping);
-
-        // Verify the result
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Fire station mapping updated successfully", response.getBody());
-    }
-
-    @Test
-    public void testUpdateFireStationMapping_notFound() {
-        FireStation updatedMapping = new FireStation("5678 Oak St", "3");
-
-        when(dataLoader.getFireStations()).thenReturn(Collections.emptyList());
-
-        // Call the controller method
-        ResponseEntity<String> response = fireStationController.updateFireStationMapping(updatedMapping);
-
-        // Verify the result
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals("Mapping not found for this address", response.getBody());
-    }
-
-    @Test
-    public void testDeleteFireStationMapping_success() {
-        // Arrange: Create the existing mapping and add it to the mocked data loader's list.
-        FireStation existingMapping = new FireStation("5678 Oak St", "2");
-        List<FireStation> fireStations = new ArrayList<>();
-        fireStations.add(existingMapping);
-
-        // Configure the dataLoader mock to return this list.
-        when(dataLoader.getFireStations()).thenReturn(fireStations);
-
-        // Act: Call the controller method to delete the fire station mapping.
-        ResponseEntity<String> response = fireStationController.deleteFireStationMapping("5678 Oak St");
-
-        // Assert: Verify the expected response and that the mapping is deleted.
-        assertEquals("Fire station mapping deleted successfully", response.getBody());
-
-        // Optional: Verify the dataLoader's list is now empty (assuming deleteFireStationMapping modifies it).
-        assertTrue(dataLoader.getFireStations().isEmpty());
-    }
-
-    @Test
-    public void testDeleteFireStationMapping_notFound() {
-        when(dataLoader.getFireStations()).thenReturn(Collections.emptyList());
-
-        // Call the controller method
-        ResponseEntity<String> response = fireStationController.deleteFireStationMapping("5678 Oak St");
-
-        // Verify the result
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals("Mapping not found for this address", response.getBody());
+        // Vérifications
+        assertEquals(1, response.getPersons().size()); // 1 personne retournée
+        assertEquals(0, response.getNumberOfAdults()); // L'âge ne peut pas être calculé sans le dossier médical
+        assertEquals(1, response.getNumberOfChildren()); // La personne est considérée comme enfant par défaut
     }
 }

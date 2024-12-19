@@ -6,7 +6,8 @@ import com.example.demo.model.Person;
 import com.example.demo.model.FireStation;
 import com.example.demo.modelResponse.FireResponse;
 import com.example.demo.modelResponse.PersonInfo;
-import com.example.demo.service.DataLoader;
+import com.example.demo.Utils.DataLoader;
+import com.example.demo.service.FireServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -25,7 +25,7 @@ class FireControllerTest {
     private DataLoader dataLoader;
 
     @InjectMocks
-    private FireController fireController;
+    private FireServiceImpl fireServiceImpl;
 
     @BeforeEach
     void setUp() {
@@ -51,7 +51,7 @@ class FireControllerTest {
         when(dataLoader.getPersons()).thenReturn(List.of(person));
 
         // Call the controller method
-        FireResponse response = fireController.getPersonsAtAddress(address);
+        FireResponse response = fireServiceImpl.getPersonsAtAddress(address);
 
         // Validate the response
         assertEquals("1", response.getFireStationNumber());
