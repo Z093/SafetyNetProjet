@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Data.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">demo</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.model</a> &gt; <span class="el_source">Data.java</span></div><h1>Data.java</h1><pre class="source lang-java linenums">package com.example.demo.model;
+
+
+import lombok.ToString;
+
+import java.util.List;
+
+
+public class Data {
+    private List&lt;Person&gt; persons;
+    private List&lt;FireStation&gt; firestations;
+    private List&lt;MedicalRecord&gt; medicalrecords;
+
+
+<span class="fc" id="L15">    public Data() {}</span>
+
+<span class="nc" id="L17">    public Data(List&lt;Person&gt; persons, List&lt;MedicalRecord&gt; medicalrecords, List&lt;FireStation&gt; firestations) {</span>
+<span class="nc" id="L18">        this.persons = persons;</span>
+<span class="nc" id="L19">        this.medicalrecords = medicalrecords;</span>
+<span class="nc" id="L20">        this.firestations = firestations;</span>
+
+<span class="nc" id="L22">    }</span>
+    public List&lt;Person&gt; getPersons() {
+<span class="fc" id="L24">        return persons;</span>
+    }
+
+    public void setPersons(List&lt;Person&gt; persons) {
+<span class="fc" id="L28">        this.persons = persons;</span>
+<span class="fc" id="L29">    }</span>
+
+    public List&lt;FireStation&gt; getFirestations() {
+<span class="fc" id="L32">        return firestations;</span>
+    }
+
+    public void setFirestations(List&lt;FireStation&gt; firestations) {
+<span class="fc" id="L36">        this.firestations = firestations;</span>
+<span class="fc" id="L37">    }</span>
+
+    public List&lt;MedicalRecord&gt; getMedicalrecords() {
+<span class="fc" id="L40">        return medicalrecords;</span>
+    }
+
+    public void setMedicalrecords(List&lt;MedicalRecord&gt; medicalrecords) {
+<span class="fc" id="L44">        this.medicalrecords = medicalrecords;</span>
+<span class="fc" id="L45">    }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

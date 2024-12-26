@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FloodController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">demo</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.controller</a> &gt; <span class="el_source">FloodController.java</span></div><h1>FloodController.java</h1><pre class="source lang-java linenums">package com.example.demo.controller;
+
+import com.example.demo.model.MedicalRecord;
+import com.example.demo.model.Person;
+import com.example.demo.model.FireStation;
+import com.example.demo.modelResponse.FloodResponse;
+import com.example.demo.service.DataLoader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+
+@RestController
+<span class="fc" id="L22">public class FloodController {</span>
+
+    @Autowired
+    private DataLoader dataLoader;
+
+    @GetMapping(&quot;/flood/stations&quot;)
+    public Map&lt;String, List&lt;FloodResponse&gt;&gt; getHouseholdsByStations(@RequestParam List&lt;String&gt; stations) {
+        // Filtrer les adresses desservies par les casernes de pompiers spécifiées
+<span class="fc" id="L30">        List&lt;String&gt; coveredAddresses = dataLoader.getFireStations().stream()</span>
+<span class="fc" id="L31">                .filter(fireStation -&gt; stations.contains(fireStation.getStation()))</span>
+<span class="fc" id="L32">                .map(FireStation::getAddress)</span>
+<span class="fc" id="L33">                .collect(Collectors.toList());</span>
+
+        // Regrouper les habitants par adresse
+<span class="fc" id="L36">        Map&lt;String, List&lt;FloodResponse&gt;&gt; householdsByAddress = dataLoader.getPersons().stream()</span>
+<span class="fc" id="L37">                .filter(person -&gt; coveredAddresses.contains(person.getAddress()))</span>
+<span class="fc" id="L38">                .collect(Collectors.groupingBy(Person::getAddress, Collectors.mapping(person -&gt; {</span>
+                    // Récupérer les informations médicales pour chaque personne
+<span class="fc" id="L40">                    MedicalRecord medicalRecord = dataLoader.getMedicalRecords().stream()</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">                            .filter(record -&gt; record.getFirstName().equals(person.getFirstName()) &amp;&amp;</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">                                    record.getLastName().equals(person.getLastName()))</span>
+<span class="fc" id="L43">                            .findFirst()</span>
+<span class="fc" id="L44">                            .orElse(null);</span>
+
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">                    int age = medicalRecord != null ? calculateAge(medicalRecord.getBirthdate()) : 0;</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">                    List&lt;String&gt; medications = medicalRecord != null ? medicalRecord.getMedications() : List.of();</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">                    List&lt;String&gt; allergies = medicalRecord != null ? medicalRecord.getAllergies() : List.of();</span>
+
+                    // Créer l'objet PersonInfo
+<span class="fc" id="L51">                    return new FloodResponse(person.getFirstName(), person.getLastName(), person.getPhone(), age, medications, allergies);</span>
+<span class="fc" id="L52">                }, Collectors.toList())));</span>
+
+<span class="fc" id="L54">        return householdsByAddress;</span>
+    }
+
+    // Méthode pour calculer l'âge à partir de la date de naissance
+    private int calculateAge(String birthdate) {
+<span class="fc" id="L59">        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;MM/dd/yyyy&quot;);</span>
+<span class="fc" id="L60">        LocalDate birthDate = LocalDate.parse(birthdate, formatter);</span>
+<span class="fc" id="L61">        return (int) ChronoUnit.YEARS.between(birthDate, LocalDate.now());</span>
+    }
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

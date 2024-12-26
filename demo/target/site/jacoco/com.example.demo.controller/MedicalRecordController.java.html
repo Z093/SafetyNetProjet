@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MedicalRecordController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">demo</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.controller</a> &gt; <span class="el_source">MedicalRecordController.java</span></div><h1>MedicalRecordController.java</h1><pre class="source lang-java linenums">package com.example.demo.controller;
+
+
+import com.example.demo.model.MedicalRecord;
+import com.example.demo.service.DataLoader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+@RestController
+@RequestMapping(&quot;/medicalRecord&quot;)
+<span class="fc" id="L15">public class MedicalRecordController {</span>
+    @Autowired
+    private DataLoader dataLoader; // Service simulant la base de données
+
+    // Ajouter un nouveau dossier médical
+    @PostMapping(&quot;/add&quot;)
+    public ResponseEntity&lt;String&gt; addMedicalRecord(@RequestBody MedicalRecord newMedicalRecord) {
+        // Vérifier si un dossier médical existe déjà pour cette personne
+<span class="fc" id="L23">        Optional&lt;MedicalRecord&gt; existingRecord = dataLoader.getMedicalRecords().stream()</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">                .filter(mr -&gt; mr.getFirstName().equalsIgnoreCase(newMedicalRecord.getFirstName()) &amp;&amp;</span>
+<span class="pc bpc" id="L25" title="1 of 2 branches missed.">                        mr.getLastName().equalsIgnoreCase(newMedicalRecord.getLastName()))</span>
+<span class="fc" id="L26">                .findFirst();</span>
+
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        if (existingRecord.isPresent()) {</span>
+<span class="fc" id="L29">            return new ResponseEntity&lt;&gt;(&quot;Medical record already exists for this person&quot;, HttpStatus.CONFLICT);</span>
+        }
+
+<span class="fc" id="L32">        dataLoader.getMedicalRecords().add(newMedicalRecord);  // Ajouter le dossier médical</span>
+<span class="fc" id="L33">        return new ResponseEntity&lt;&gt;(&quot;Medical record added successfully&quot;, HttpStatus.CREATED);</span>
+    }
+
+    // Mettre à jour un dossier médical existant
+    @PutMapping
+    public ResponseEntity&lt;String&gt; updateMedicalRecord(@RequestBody MedicalRecord updatedMedicalRecord) {
+<span class="fc" id="L39">        Optional&lt;MedicalRecord&gt; existingRecord = dataLoader.getMedicalRecords().stream()</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">                .filter(mr -&gt; mr.getFirstName().equalsIgnoreCase(updatedMedicalRecord.getFirstName()) &amp;&amp;</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">                        mr.getLastName().equalsIgnoreCase(updatedMedicalRecord.getLastName()))</span>
+<span class="fc" id="L42">                .findFirst();</span>
+
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (existingRecord.isPresent()) {</span>
+<span class="fc" id="L45">            MedicalRecord medicalRecordToUpdate = existingRecord.get();</span>
+<span class="fc" id="L46">            medicalRecordToUpdate.setBirthdate(updatedMedicalRecord.getBirthdate());</span>
+<span class="fc" id="L47">            medicalRecordToUpdate.setMedications(updatedMedicalRecord.getMedications());</span>
+<span class="fc" id="L48">            medicalRecordToUpdate.setAllergies(updatedMedicalRecord.getAllergies());</span>
+
+<span class="fc" id="L50">            return new ResponseEntity&lt;&gt;(&quot;Medical record updated successfully&quot;, HttpStatus.OK);</span>
+        } else {
+<span class="fc" id="L52">            return new ResponseEntity&lt;&gt;(&quot;Medical record not found&quot;, HttpStatus.NOT_FOUND);</span>
+        }
+    }
+
+    // Supprimer un dossier médical
+    @DeleteMapping(&quot;/delete&quot;)
+    public ResponseEntity&lt;String&gt; deleteMedicalRecord(@RequestParam String firstName, @RequestParam String lastName) {
+<span class="fc" id="L59">        Optional&lt;MedicalRecord&gt; existingRecord = dataLoader.getMedicalRecords().stream()</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">                .filter(mr -&gt; mr.getFirstName().equalsIgnoreCase(firstName) &amp;&amp;</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">                        mr.getLastName().equalsIgnoreCase(lastName))</span>
+<span class="fc" id="L62">                .findFirst();</span>
+
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (existingRecord.isPresent()) {</span>
+<span class="fc" id="L65">            dataLoader.getMedicalRecords().remove(existingRecord.get());  // Supprimer le dossier médical</span>
+<span class="fc" id="L66">            return new ResponseEntity&lt;&gt;(&quot;Medical record deleted successfully&quot;, HttpStatus.OK);</span>
+        } else {
+<span class="fc" id="L68">            return new ResponseEntity&lt;&gt;(&quot;Medical record not found&quot;, HttpStatus.NOT_FOUND);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
