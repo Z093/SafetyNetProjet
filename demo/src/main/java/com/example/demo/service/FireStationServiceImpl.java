@@ -92,5 +92,4 @@ public class FireStationServiceImpl implements FireStationService {
             return 0;
         }
     }
-
 }

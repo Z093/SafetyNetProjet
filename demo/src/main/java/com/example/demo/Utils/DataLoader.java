@@ -1,6 +1,5 @@
 package com.example.demo.Utils;
 
-
 import com.example.demo.model.FireStation;
 import com.example.demo.model.MedicalRecord;
 import com.example.demo.model.Person;
@@ -17,7 +16,6 @@ import java.util.List;
 @Service
 public class DataLoader {
     private List<Person> persons;
-    //private List<Person> persons = new ArrayList<>();
     private List<FireStation> fireStations;
     private List<MedicalRecord> medicalRecords;
 @Value("${DataUrl}")

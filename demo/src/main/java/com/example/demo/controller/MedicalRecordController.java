@@ -5,6 +5,7 @@ import com.example.demo.service.MedicalRecordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,13 @@ public class MedicalRecordController {
     @PostMapping("/add")
     public ResponseEntity<String> addMedicalRecord(@RequestBody MedicalRecord newMedicalRecord) {
         logger.info("Attempting to add a new medical record for {} {}", newMedicalRecord.getFirstName(), newMedicalRecord.getLastName());
-        return medicalRecordService.addMedicalRecord(newMedicalRecord);
+        boolean resultat = medicalRecordService.addMedicalRecord(newMedicalRecord);
+        if (resultat) {
+            return ResponseEntity.ok("Medical record added successfully");
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Medical Record not added");
+        }
     }
 
     // Mettre à jour un dossier médical existant
@@ -31,7 +38,13 @@ public class MedicalRecordController {
     public ResponseEntity<String> updateMedicalRecord(@RequestBody MedicalRecord updatedMedicalRecord) {
         logger.info("Attempting to update medical record for {} {}", updatedMedicalRecord.getFirstName(), updatedMedicalRecord.getLastName());
 
-       return medicalRecordService.updateMedicalRecord(updatedMedicalRecord);
+        boolean resultat = medicalRecordService.updateMedicalRecord(updatedMedicalRecord);
+        if (resultat) {
+            return ResponseEntity.ok("Medical record updated successfully");
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medical Record not updated");
+        }
         }
 
 
@@ -39,9 +52,15 @@ public class MedicalRecordController {
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteMedicalRecord(@RequestParam String firstName, @RequestParam String lastName)  {
         logger.info("Attempting to delete medical record for {} {}", firstName, lastName);
-        return  medicalRecordService.deleteMedicalRecord(firstName, lastName);
+        boolean resultat =  medicalRecordService.deleteMedicalRecord(firstName, lastName);
+
+        if (resultat) {
+            return ResponseEntity.ok("Medical record deleted successfully");
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medical Record not deleted");
+        }
 }
 
         }
-
 

@@ -1,13 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.Utils.DataLoader;
-import com.example.demo.controller.PersonController;
 import com.example.demo.model.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,7 +17,7 @@ public class PersonServiceImpl implements PersonService {
     private static final Logger logger = LoggerFactory.getLogger(PersonServiceImpl.class);
 
     @Override
-    public ResponseEntity<String> addPerson(Person newPerson){
+    public boolean addPerson(Person newPerson){
         logger.info("Attempting to add a new person: {} {}", newPerson.getFirstName(), newPerson.getLastName());
 
         // Vérifier si la personne existe déjà
@@ -31,16 +28,16 @@ public class PersonServiceImpl implements PersonService {
 
         if (existingPerson.isPresent()) {
             logger.error("Person already exists: {} {}", newPerson.getFirstName(), newPerson.getLastName());
-            return new ResponseEntity<>("Person already exists", HttpStatus.CONFLICT);
+            return false;
         }
 
         dataLoader.getPersons().add(newPerson);  // Ajouter la nouvelle personne
         logger.info("Person successfully added: {} {}", newPerson.getFirstName(), newPerson.getLastName());
-        return new ResponseEntity<>("Person added successfully", HttpStatus.CREATED);
+        return true;
 
     }
 
-    public ResponseEntity<String> updatePerson(Person updatedPerson){
+    public boolean updatePerson(Person updatedPerson){
         logger.info("Attempting to update person: {} {}", updatedPerson.getFirstName(), updatedPerson.getLastName());
 
         Optional<Person> existingPerson = dataLoader.getPersons().stream()
@@ -58,15 +55,15 @@ public class PersonServiceImpl implements PersonService {
             personToUpdate.setEmail(updatedPerson.getEmail());
 
             logger.info("Person successfully updated: {} {}", updatedPerson.getFirstName(), updatedPerson.getLastName());
-            return new ResponseEntity<>("Person updated successfully", HttpStatus.OK);
+            return true;
         } else {
             logger.error("Person not found for update: {} {}", updatedPerson.getFirstName(), updatedPerson.getLastName());
-            return new ResponseEntity<>("Person not found", HttpStatus.NOT_FOUND);
+            return false;
         }
 
     }
 
-    public ResponseEntity<String> deletePerson(String firstName, String lastName){
+    public boolean deletePerson(String firstName, String lastName){
         logger.info("Attempting to delete person: {} {}", firstName, lastName);
 
         Optional<Person> existingPerson = dataLoader.getPersons().stream()
@@ -77,10 +74,10 @@ public class PersonServiceImpl implements PersonService {
         if (existingPerson.isPresent()) {
             dataLoader.getPersons().remove(existingPerson.get());  // Supprimer la personne
             logger.info("Person successfully deleted: {} {}", firstName, lastName);
-            return new ResponseEntity<>("Person deleted successfully", HttpStatus.OK);
+            return true;
         } else {
             logger.error("Person not found for deletion: {} {}", firstName, lastName);
-            return new ResponseEntity<>("Person not found", HttpStatus.NOT_FOUND);
+            return false;
         }
     }
 }

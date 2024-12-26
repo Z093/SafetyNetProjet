@@ -1,33 +1,7 @@
-2024-12-19T00:16:54.807+01:00  INFO 42059 --- [demo] [main] c.example.demo.PersonInfoControllerTest  : Starting PersonInfoControllerTest using Java 21.0.1 with PID 42059 (started by ibenhamouda in /Users/ibenhamouda/git/NewProject/SafetyNetProjet/demo)
-2024-12-19T00:16:54.811+01:00  INFO 42059 --- [demo] [main] c.example.demo.PersonInfoControllerTest  : No active profile set, falling back to 1 default profile: "default"
-2024-12-19T00:16:55.529+01:00  INFO 42059 --- [demo] [main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2024-12-19T00:16:55.529+01:00  INFO 42059 --- [demo] [main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2024-12-19T00:16:55.530+01:00  INFO 42059 --- [demo] [main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
-2024-12-19T00:16:55.540+01:00  INFO 42059 --- [demo] [main] c.example.demo.PersonInfoControllerTest  : Started PersonInfoControllerTest in 0.852 seconds (process running for 1.258)
-2024-12-19T00:23:55.617+01:00  INFO 42548 --- [demo] [main] c.example.demo.PersonInfoControllerTest  : Starting PersonInfoControllerTest using Java 21.0.1 with PID 42548 (started by ibenhamouda in /Users/ibenhamouda/git/NewProject/SafetyNetProjet/demo)
-2024-12-19T00:23:55.618+01:00  INFO 42548 --- [demo] [main] c.example.demo.PersonInfoControllerTest  : No active profile set, falling back to 1 default profile: "default"
-2024-12-19T00:23:56.343+01:00  INFO 42548 --- [demo] [main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2024-12-19T00:23:56.343+01:00  INFO 42548 --- [demo] [main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2024-12-19T00:23:56.344+01:00  INFO 42548 --- [demo] [main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
-2024-12-19T00:23:56.353+01:00  INFO 42548 --- [demo] [main] c.example.demo.PersonInfoControllerTest  : Started PersonInfoControllerTest in 0.856 seconds (process running for 1.208)
-2024-12-19T00:36:16.488+01:00  INFO 43318 --- [demo] [main] c.example.demo.PersonInfoControllerTest  : Starting PersonInfoControllerTest using Java 21.0.1 with PID 43318 (started by ibenhamouda in /Users/ibenhamouda/git/NewProject/SafetyNetProjet/demo)
-2024-12-19T00:36:16.489+01:00  INFO 43318 --- [demo] [main] c.example.demo.PersonInfoControllerTest  : No active profile set, falling back to 1 default profile: "default"
-2024-12-19T00:36:17.222+01:00  INFO 43318 --- [demo] [main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2024-12-19T00:36:17.222+01:00  INFO 43318 --- [demo] [main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2024-12-19T00:36:17.223+01:00  INFO 43318 --- [demo] [main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
-2024-12-19T00:36:17.233+01:00  INFO 43318 --- [demo] [main] c.example.demo.PersonInfoControllerTest  : Started PersonInfoControllerTest in 0.863 seconds (process running for 1.265)
-2024-12-19T00:52:13.844+01:00  INFO 44235 --- [demo] [main] c.example.demo.PersonInfoControllerTest  : Starting PersonInfoControllerTest using Java 21.0.1 with PID 44235 (started by ibenhamouda in /Users/ibenhamouda/git/NewProject/SafetyNetProjet/demo)
-2024-12-19T00:52:13.844+01:00  INFO 44235 --- [demo] [main] c.example.demo.PersonInfoControllerTest  : No active profile set, falling back to 1 default profile: "default"
-2024-12-19T00:52:14.556+01:00  INFO 44235 --- [demo] [main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2024-12-19T00:52:14.556+01:00  INFO 44235 --- [demo] [main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2024-12-19T00:52:14.557+01:00  INFO 44235 --- [demo] [main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
-2024-12-19T00:52:14.566+01:00  INFO 44235 --- [demo] [main] c.example.demo.PersonInfoControllerTest  : Started PersonInfoControllerTest in 0.838 seconds (process running for 1.217)
-2024-12-19T01:26:06.741+01:00  INFO 46221 --- [demo] [main] c.example.demo.PersonInfoControllerTest  : Starting PersonInfoControllerTest using Java 21.0.1 with PID 46221 (started by ibenhamouda in /Users/ibenhamouda/git/NewProject/SafetyNetProjet/demo)
-2024-12-19T01:26:06.741+01:00  INFO 46221 --- [demo] [main] c.example.demo.PersonInfoControllerTest  : No active profile set, falling back to 1 default profile: "default"
-2024-12-19T01:26:07.442+01:00  INFO 46221 --- [demo] [main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2024-12-19T01:26:07.442+01:00  INFO 46221 --- [demo] [main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2024-12-19T01:26:07.442+01:00  INFO 46221 --- [demo] [main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
-2024-12-19T01:26:07.453+01:00  INFO 46221 --- [demo] [main] c.example.demo.PersonInfoControllerTest  : Started PersonInfoControllerTest in 0.827 seconds (process running for 1.169)
-2024-12-19T01:37:51.487+01:00  INFO 47039 --- [demo] [main] com.example.demo.DemoApplicationTests    : Starting DemoApplicationTests using Java 21.0.1 with PID 47039 (started by ibenhamouda in /Users/ibenhamouda/git/NewProject/SafetyNetProjet/demo)
-2024-12-19T01:37:51.487+01:00  INFO 47039 --- [demo] [main] com.example.demo.DemoApplicationTests    : No active profile set, falling back to 1 default profile: "default"
-2024-12-19T01:37:51.858+01:00  INFO 47039 --- [demo] [main] com.example.demo.DemoApplicationTests    : Started DemoApplicationTests in 0.469 seconds (process running for 0.818)
+2024-12-27T00:13:34.905+01:00  INFO 24488 --- [demo] [main] c.e.d.c.FireStationControllerTest        : Starting FireStationControllerTest using Java 21.0.1 with PID 24488 (started by ibenhamouda in /Users/ibenhamouda/git/NewProject/SafetyNetProjet/demo)
+2024-12-27T00:13:34.909+01:00  INFO 24488 --- [demo] [main] c.e.d.c.FireStationControllerTest        : No active profile set, falling back to 1 default profile: "default"
+2024-12-27T00:13:35.611+01:00  INFO 24488 --- [demo] [main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2024-12-27T00:13:35.611+01:00  INFO 24488 --- [demo] [main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2024-12-27T00:13:35.612+01:00  INFO 24488 --- [demo] [main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2024-12-27T00:13:35.621+01:00  INFO 24488 --- [demo] [main] c.e.d.c.FireStationControllerTest        : Started FireStationControllerTest in 0.839 seconds (process running for 1.183)
+2024-12-27T00:13:35.649+01:00  INFO 24488 --- [demo] [main] c.e.d.controller.FireStationController   : Received request for fire station: 1

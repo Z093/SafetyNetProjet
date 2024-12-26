@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
-import lombok.Data;
-import lombok.ToString;
+
 
 public class FireStation {
     private String address;

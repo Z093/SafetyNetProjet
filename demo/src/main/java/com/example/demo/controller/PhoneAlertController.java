@@ -1,8 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.Utils.DataLoader;
-import com.example.demo.model.Person;
-import com.example.demo.model.FireStation;
 import com.example.demo.service.PhoneAlertService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 public class PhoneAlertController {

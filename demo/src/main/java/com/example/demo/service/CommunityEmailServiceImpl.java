@@ -42,4 +42,5 @@ public class CommunityEmailServiceImpl implements CommunityEmailService {
         return List.of(); // Retourner une liste vide en cas d'erreur
     }
 }
+
 }

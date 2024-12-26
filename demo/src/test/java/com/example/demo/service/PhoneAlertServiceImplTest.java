@@ -1,8 +1,8 @@
-import com.example.demo.controller.PhoneAlertController;
+package com.example.demo.service;
+
 import com.example.demo.Utils.DataLoader;
 import com.example.demo.model.Person;
 import com.example.demo.model.FireStation;
-import com.example.demo.service.PhoneAlertServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-public class PhoneAlertControllerTest {
+public class PhoneAlertServiceImplTest {
 
     @Mock
     private DataLoader dataLoader;

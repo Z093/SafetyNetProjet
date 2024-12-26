@@ -1,7 +1,5 @@
 package com.example.demo.modelResponse;
 
-
-
 import java.util.List;
 
 

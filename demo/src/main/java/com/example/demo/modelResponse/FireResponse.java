@@ -31,7 +31,5 @@ import java.util.List;
         }
 
 
-
-        // Getters et setters
     }
 

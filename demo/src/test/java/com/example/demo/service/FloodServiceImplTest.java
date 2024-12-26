@@ -1,12 +1,10 @@
-package com.example.demo;
+package com.example.demo.service;
 
-import com.example.demo.controller.FloodController;
 import com.example.demo.model.MedicalRecord;
 import com.example.demo.model.Person;
 import com.example.demo.model.FireStation;
 import com.example.demo.modelResponse.FloodResponse;
 import com.example.demo.Utils.DataLoader;
-import com.example.demo.service.FloodServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,7 +17,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-public class FloodControllerTest {
+public class FloodServiceImplTest {
 
     @Mock
     private DataLoader dataLoader;

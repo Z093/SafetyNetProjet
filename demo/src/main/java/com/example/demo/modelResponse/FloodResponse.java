@@ -1,7 +1,5 @@
 package com.example.demo.modelResponse;
 
-import lombok.Data;
-import lombok.ToString;
 
 import java.util.List;
 

@@ -1,7 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Person;
-import com.example.demo.Utils.DataLoader;
 
 import com.example.demo.service.CommunityEmailService;
 import org.slf4j.Logger;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class CommunityEmailController {

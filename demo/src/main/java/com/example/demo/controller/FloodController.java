@@ -1,10 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.MedicalRecord;
-import com.example.demo.model.Person;
-import com.example.demo.model.FireStation;
+
 import com.example.demo.modelResponse.FloodResponse;
-import com.example.demo.Utils.DataLoader;
+
 import com.example.demo.service.FloodService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
+
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
 
 @RestController
 public class FloodController {

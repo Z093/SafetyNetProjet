@@ -1,16 +1,14 @@
 package com.example.demo.service;
 
 import com.example.demo.Utils.DataLoader;
-import com.example.demo.controller.PersonInfoController;
 import com.example.demo.model.MedicalRecord;
 import com.example.demo.model.Person;
-import com.example.demo.modelResponse.PersonInfo;
 import com.example.demo.modelResponse.PersonInfoResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

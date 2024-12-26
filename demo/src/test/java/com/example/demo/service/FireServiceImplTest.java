@@ -1,13 +1,11 @@
-package com.example.demo;
+package com.example.demo.service;
 
-import com.example.demo.controller.FireController;
 import com.example.demo.model.MedicalRecord;
 import com.example.demo.model.Person;
 import com.example.demo.model.FireStation;
 import com.example.demo.modelResponse.FireResponse;
 import com.example.demo.modelResponse.PersonInfo;
 import com.example.demo.Utils.DataLoader;
-import com.example.demo.service.FireServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,7 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-class FireControllerTest {
+class FireServiceImplTest {
 
     @Mock
     private DataLoader dataLoader;

@@ -1,8 +1,5 @@
 package com.example.demo.modelResponse;
 
-import lombok.Data;
-import lombok.ToString;
-
 import java.util.List;
 
 // Classe pour représenter les informations des résidents

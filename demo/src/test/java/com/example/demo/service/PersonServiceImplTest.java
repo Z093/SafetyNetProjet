@@ -1,9 +1,7 @@
-package com.example.demo;
+package com.example.demo.service;
 
-import com.example.demo.controller.PersonController;
 import com.example.demo.model.Person;
 import com.example.demo.Utils.DataLoader;
-import com.example.demo.service.PersonServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,10 +13,10 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class PersonControllerTest {
+class PersonServiceImplTest {
 
     @Mock
     private DataLoader dataLoader;
@@ -48,11 +46,12 @@ class PersonControllerTest {
         Person newPerson = new Person("Jane", "Smith", "456 Maple St", "Los Angeles", "90001", "987-654-3210", "jane.doe@example.com", 30, null);
 
         // Act
-        ResponseEntity<String> response = personServiceImpl.addPerson(newPerson);
+        boolean response = personServiceImpl.addPerson(newPerson);
 
         // Assert
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals("Person added successfully", response.getBody());
+        //assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        //assertEquals("Person added successfully", response.getBody());
+        assertTrue(response);
         verify(dataLoader, times(2)).getPersons(); // Ensure called once
     }
 
@@ -60,11 +59,12 @@ class PersonControllerTest {
     void testAddPerson_Conflict() {
         Person duplicatePerson = new Person("John", "Doe", "789 Elm St", "Chicago", "60601", "555-123-4567", "johndoe@example.com", 30, null);
 
-        ResponseEntity<String> response = personServiceImpl.addPerson(duplicatePerson);
+        boolean response = personServiceImpl.addPerson(duplicatePerson);
 
         // Verify
-        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
-        assertEquals("Person already exists", response.getBody());
+        assertFalse(response);
+        //assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        //assertEquals("Person already exists", response.getBody());
         verify(dataLoader, times(1)).getPersons();
     }
 
@@ -72,11 +72,12 @@ class PersonControllerTest {
     void testUpdatePerson_Success() {
         Person updatedPerson = new Person("John", "Doe", "789 Elm St", "Chicago", "60601", "555-123-4567", "johndoe@example.com", 30, null);
 
-        ResponseEntity<String> response = personServiceImpl.updatePerson(updatedPerson);
+        boolean response = personServiceImpl.updatePerson(updatedPerson);
 
         // Verify
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Person updated successfully", response.getBody());
+        //assertEquals(HttpStatus.OK, response.getStatusCode());
+        //assertEquals("Person updated successfully", response.getBody());
+        assertTrue(response);
         verify(dataLoader, times(1)).getPersons();
     }
 
@@ -84,31 +85,36 @@ class PersonControllerTest {
     void testUpdatePerson_NotFound() {
         Person nonExistentPerson = new Person("Jane", "Doe", "456 Maple St", "San Francisco", "94101", "987-654-3210", "jane.doe@example.com", 30, null);
 
-        ResponseEntity<String> response = personServiceImpl.updatePerson(nonExistentPerson);
+        boolean response = personServiceImpl.updatePerson(nonExistentPerson);
 
         // Verify
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals("Person not found", response.getBody());
+        //assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        //assertEquals("Person not found", response.getBody());
+        assertFalse(response);
         verify(dataLoader, times(1)).getPersons();
     }
 
     @Test
     void testDeletePerson_Success() {
-        ResponseEntity<String> response = personServiceImpl.deletePerson("John", "Doe");
+
+         boolean response = personServiceImpl.deletePerson("John", "Doe");
 
         // Verify
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Person deleted successfully", response.getBody());
+        //assertEquals(HttpStatus.OK, response.getStatusCode());
+        //assertEquals("Person deleted successfully", response.getBody());
+        assertTrue(response);
         verify(dataLoader, times(2)).getPersons();
     }
 
     @Test
     void testDeletePerson_NotFound() {
-        ResponseEntity<String> response = personServiceImpl.deletePerson("Jane", "Doe");
+
+        boolean response = personServiceImpl.deletePerson("Jane", "Doe");
 
         // Verify
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals("Person not found", response.getBody());
+        //assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        //assertEquals("Person not found", response.getBody());
+        assertFalse(response);
         verify(dataLoader, times(1)).getPersons();
     }
 }

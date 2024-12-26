@@ -1,7 +1,6 @@
 package com.example.demo.modelResponse;
 
-import lombok.Data;
-import lombok.ToString;
+
 
 public class PersonResponse {
     private String firstName;
@@ -48,5 +47,4 @@ public class PersonResponse {
         this.phone = phone;
     }
 
-    // Getters et setters
 }

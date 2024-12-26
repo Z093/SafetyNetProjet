@@ -7,5 +7,4 @@ import java.util.Map;
 
 public interface FloodService {
     Map<String, List<FloodResponse>> getHouseholdsByStations(List<String> stations);
-
 }
